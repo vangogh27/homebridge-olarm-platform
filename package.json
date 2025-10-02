@@ -1,22 +1,28 @@
 {
-  "name": "homebridge-plugin-name",
-  "displayName": "Plugin Name",
+  "name": "homebridge-olarm-platform",
+  "displayName": "Olarm Security System",
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "description": "A short description about what your plugin does.",
-  "author": "Your Name",
+  "description": "A comprehensive Homebridge plugin for Olarm security systems with real-time MQTT events and zone discovery.",
+  "author": "Louis Germishuys",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/USERNAME/GITHUB_PROJECT_NAME#readme",
+  "homepage": "https://github.com/vangogh27/homebridge-olarm-platform#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/USERNAME/GITHUB_PROJECT_NAME.git"
+    "url": "https://github.com/vangogh27/homebridge-olarm-platform.git"
   },
   "bugs": {
-    "url": "https://github.com/USERNAME/GITHUB_PROJECT_NAME/issues"
+    "url": "https://github.com/vangogh27/homebridge-olarm-platform/issues"
   },
   "keywords": [
-    "homebridge-plugin"
+    "homebridge-plugin",
+    "olarm",
+    "security-system",
+    "alarm",
+    "mqtt",
+    "smart-home",
+    "homekit"
   ],
   "main": "dist/index.js",
   "engines": {
@@ -30,11 +36,15 @@
     "watch": "npm run build && npm link && nodemon"
   },
   "dependencies": {
-    "homebridge-lib": "^7.1.8"
+    "axios": "^1.7.2",
+    "mqtt": "^5.3.4",
+    "fs-extra": "^11.2.0",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@types/node": "^24.5.2",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.10.1",
     "eslint": "^9.36.0",
     "homebridge": "^2.0.0-beta.30",
     "nodemon": "^3.1.10",

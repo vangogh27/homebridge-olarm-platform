@@ -1,9 +1,19 @@
 /**
- * This is the name of the platform that users will use to register the plugin in the Homebridge config.json
+ * Platform and plugin identifiers
  */
-export const PLATFORM_NAME = 'ExampleHomebridgePlugin';
+export const PLATFORM_NAME = 'Olarm';
+export const PLUGIN_NAME = 'homebridge-olarm-platform';
 
 /**
- * This must match the name of your plugin as defined the package.json `name` property
+ * Olarm API endpoints
  */
-export const PLUGIN_NAME = 'homebridge-plugin-name';
+export const AUTH_BASE_URL = 'https://auth.olarm.com';
+export const LEGACY_API_BASE_URL = 'https://api-legacy.olarm.com';
+export const PUBLIC_API_BASE_URL = 'https://apiv4.olarm.co/api/v4';
+
+/**
+ * MQTT connection settings for native app authentication
+ */
+export const NATIVE_MQTT_HOST = 'mqtt-ws.olarm.com';
+export const NATIVE_MQTT_PORT = 443;
+export const NATIVE_MQTT_USERNAME = 'native_app';
