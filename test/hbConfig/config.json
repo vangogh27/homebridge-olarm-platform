@@ -15,23 +15,19 @@
     {
       "platform": "Olarm",
       "name": "Olarm",
+      "deviceId": "YOUR_DEVICE_ID",
+      "deviceName": "Olarm Security",
       "primaryAuth": {
-        "email": "louis.germis@gmail.com",
-        "password": "sm2viB2YTvwcWos!"
+        "email": "your-email@example.com",
+        "password": "your-password"
       },
       "fallbackAuth": {
-        "apiKey": "api_8bd7797a5ee3088fd942363eed329ff899f8ecb8bfebb2821bdd0fbd1922"
+        "apiKey": ""
       },
-      "deviceId": "b9707ef5-4b83-4273-9c12-a41db616c65d",
-      "deviceName": "Olarm",
-      "includedZones": [
-        9,
-        10,
-        11,
-        12
-      ],
+      "includedZones": [],
       "addBypassSwitches": false,
-      "pollingInterval": 300
+      "pollingInterval": 300,
+      "automations": []
     }
   ]
 }
