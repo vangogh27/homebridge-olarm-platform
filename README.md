@@ -1,7 +1,6 @@
 # Homebridge Olarm Platform
 
 [![npm version](https://badge.fury.io/js/homebridge-olarm-platform.svg)](https://badge.fury.io/js/homebridge-olarm-platform)
-[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 
 A comprehensive Homebridge plugin for Olarm security systems with real-time MQTT events and automatic zone discovery.
 
