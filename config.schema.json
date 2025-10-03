@@ -115,7 +115,6 @@
             "armMode": {
               "title": "Arm Mode",
               "type": "string",
-              "default": "arm",
               "oneOf": [
                 { "title": "Away", "enum": ["arm"] },
                 { "title": "Stay", "enum": ["stay"] },
