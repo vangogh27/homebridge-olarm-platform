@@ -123,16 +123,124 @@ Each automation creates a stateless switch that bypasses specific zones and then
 
 ## Getting Your Device ID
 
-1. Log into the [Olarm web portal](https://app.olarm.co/)
-2. Select your device
-3. The device ID is in the URL: `https://app.olarm.co/devices/{DEVICE_ID}`
+### Python Script (Detailed)
+
+Use this script to retrieve all your devices with their IDs and IMEIs:
+
+<details>
+<summary>Click to expand Device ID retriever script</summary>
+
+Save as `get_device_id.py`:
+
+```python
+import requests
+import json
+import getpass
+
+# Define the API endpoints
+AUTH_BASE_URL = 'https://auth.olarm.com'
+LEGACY_API_BASE_URL = 'https://api-legacy.olarm.com'
+
+def main():
+    """
+    Retrieves all Olarm devices and their IDs for the authenticated user.
+    """
+    print("--- Olarm Device ID Retriever ---")
+    
+    # Get credentials
+    email = input("Enter your Olarm account email: ")
+    password = getpass.getpass("Enter your Olarm account password: ")
+    
+    session = requests.Session()
+    
+    try:
+        # Step 1: Login
+        print("\nStep 1: Authenticating...")
+        login_url = f'{AUTH_BASE_URL}/api/v4/oauth/login/mobile'
+        login_response = session.post(login_url, data={
+            'userEmailPhone': email,
+            'userPass': password,
+        })
+        login_response.raise_for_status()
+        login_data = login_response.json()
+        access_token = login_data.get('oat')
+        
+        if not access_token:
+            raise ValueError("Login failed - no access token received.")
+        print("✓ Login successful.")
+        
+        # Step 2: Get user index
+        print("Step 2: Fetching user details...")
+        user_index_url = f'{AUTH_BASE_URL}/api/v4/oauth/federated-link-existing?oat={access_token}'
+        user_index_response = session.post(user_index_url, data={
+            'userEmailPhone': email,
+            'userPass': password,
+            'captchaToken': 'olarmapp',
+        })
+        user_index_response.raise_for_status()
+        user_index_data = user_index_response.json()
+        user_index = user_index_data.get('userIndex')
+        
+        if not user_index:
+            raise ValueError("User index not found.")
+        print(f"✓ User details found (User Index: {user_index}).")
+        
+        # Step 3: Get devices
+        print("Step 3: Retrieving device list...")
+        devices_url = f'{LEGACY_API_BASE_URL}/api/v2/users/{user_index}'
+        devices_response = session.get(
+            devices_url,
+            headers={'Authorization': f'Bearer {access_token}'}
+        )
+        devices_response.raise_for_status()
+        devices_data = devices_response.json()
+        devices = devices_data.get('devices', [])
+        
+        if not devices:
+            print("\nNo devices found for this account.")
+            return
+        
+        # Display results
+        print(f"\n✓ Success! Found {len(devices)} device(s).\n")
+        print("="*60)
+        for i, device in enumerate(devices, 1):
+            print(f" DEVICE #{i}")
+            print(f" Device Name: {device.get('deviceName', 'N/A')}")
+            print(f" Device ID (for config.json): {device.get('id', 'N/A')}")
+            print(f" Device IMEI (for MQTT): {device.get('IMEI', 'N/A')}")
+            print("-"*60)
+    
+    except requests.exceptions.HTTPError as e:
+        print(f"\n--- ERROR ---")
+        print(f"API error: {e.response.status_code} {e.response.reason}")
+        try:
+            error_body = e.response.json()
+            print(f"Message: {error_body.get('message', e.response.text)}")
+        except json.JSONDecodeError:
+            print(f"Response: {e.response.text}")
+    except Exception as e:
+        print(f"\n--- Unexpected error ---")
+        print(e)
+
+if __name__ == "__main__":
+    main()
+```
+
+Run with:
+```bash
+python3 get_device_id.py
+```
+
+**Required:** `pip install requests`
+
+</details>
 
 ## Getting Your API Key (Optional)
 
 API key is only needed for fallback polling:
 
-1. Log into [Olarm web portal](https://app.olarm.co/)
-2. Go to Settings → API Keys
+1. Log into [Olarm web portal](https://login.olarm.com/)
+2. Go to API access (if unavailable go to https://user.olarm.com/#/api once logged in)
 3. Generate a new API key
 4. Add it to `fallbackAuth.apiKey` in config
 

@@ -124,3 +124,7 @@ dist
 .idea
 
 /test/hbConfig
+test/hbConfig/config.json
+test/hbConfig/auth.json
+test/hbConfig/persist/
+test/hbConfig/accessories/

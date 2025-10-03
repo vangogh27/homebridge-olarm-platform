@@ -1,18 +1,185 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "Olarm",
   "pluginType": "platform",
   "singular": true,
-  "strictValidation": false,
+  "headerDisplay": "For setup instructions, see the [README](https://github.com/vangogh27/homebridge-olarm-platform#readme)",
+  "footerDisplay": "For help and support, please visit the [GitHub repository](https://github.com/vangogh27/homebridge-olarm-platform/issues)",
   "schema": {
     "type": "object",
-    "required": ["name"],
-    "additionalProperties": false,
     "properties": {
       "name": {
         "title": "Name",
         "type": "string",
-        "default": "Example Dynamic Platform"
+        "default": "Olarm",
+        "required": true
+      },
+      "deviceId": {
+        "title": "Device ID",
+        "type": "string",
+        "required": true,
+        "description": "Your Olarm device ID"
+      },
+      "deviceName": {
+        "title": "Device Name",
+        "type": "string",
+        "default": "Olarm Security",
+        "description": "The name displayed in HomeKit for the security system"
+      },
+      "primaryAuth": {
+        "title": "Primary Authentication",
+        "type": "object",
+        "required": true,
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string",
+            "required": true,
+            "format": "email",
+            "description": "Your Olarm account email",
+            "placeholder": "user@example.com"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string",
+            "required": true,
+            "description": "Your Olarm account password"
+          }
+        }
+      },
+      "fallbackAuth": {
+        "title": "Fallback Authentication (Optional)",
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "title": "API Key",
+            "type": "string",
+            "description": "Optional API key for fallback polling when MQTT disconnects"
+          }
+        }
+      },
+      "includedZones": {
+        "title": "Included Zones",
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "description": "List of zone numbers to include (leave empty for all zones)"
+      },
+      "addBypassSwitches": {
+        "title": "Add Bypass Switches",
+        "type": "boolean",
+        "default": false,
+        "description": "Add switches to bypass individual zones"
+      },
+      "pollingInterval": {
+        "title": "Polling Interval (seconds)",
+        "type": "integer",
+        "default": 300,
+        "minimum": 30,
+        "description": "How often to poll for updates when MQTT is unavailable"
+      },
+      "automations": {
+        "title": "Automations",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "title": "ID",
+              "type": "string",
+              "description": "Unique identifier for this automation"
+            },
+            "name": {
+              "title": "Name",
+              "type": "string",
+              "required": true,
+              "description": "Name displayed in HomeKit"
+            },
+            "zones": {
+              "title": "Zones to Bypass",
+              "type": "array",
+              "required": true,
+              "items": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "description": "List of zone numbers to bypass before arming"
+            },
+            "armMode": {
+              "title": "Arm Mode",
+              "type": "string",
+              "required": true,
+              "default": "arm",
+              "oneOf": [
+                { "title": "Away", "enum": ["arm"] },
+                { "title": "Stay", "enum": ["stay"] },
+                { "title": "Night", "enum": ["sleep"] }
+              ],
+              "description": "Which arm mode to activate after bypassing zones"
+            }
+          }
+        }
       }
     }
-  }
+  },
+  "layout": [
+    {
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": [
+        "name",
+        "deviceId",
+        "deviceName"
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Authentication",
+      "expandable": false,
+      "items": [
+        "primaryAuth.email",
+        "primaryAuth.password"
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Fallback API",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        "fallbackAuth.apiKey",
+        "pollingInterval"
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Zone Configuration",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        "includedZones",
+        "addBypassSwitches"
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Automations",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "key": "automations",
+          "type": "array",
+          "title": "{{ value.name || 'New Automation' }}",
+          "items": [
+            "automations[].id",
+            "automations[].name",
+            "automations[].zones",
+            "automations[].armMode"
+          ]
+        }
+      ]
+    }
+  ]
 }
