@@ -60,9 +60,10 @@
       "includedZones": {
         "title": "Included Zones",
         "type": "array",
+        "uniqueItems": true,
         "items": {
-          "type": "integer",
-          "minimum": 1
+          "type": "number",
+          "title": "Zone Number"
         },
         "description": "List of zone numbers to include (leave empty for all zones)"
       },
@@ -88,28 +89,26 @@
             "id": {
               "title": "ID",
               "type": "string",
-              "description": "Unique identifier for this automation"
+              "description": "Unique identifier for this automation (optional)"
             },
             "name": {
               "title": "Name",
               "type": "string",
-              "required": true,
               "description": "Name displayed in HomeKit"
             },
             "zones": {
               "title": "Zones to Bypass",
               "type": "array",
-              "required": true,
+              "uniqueItems": true,
               "items": {
-                "type": "integer",
-                "minimum": 1
+                "type": "number",
+                "title": "Zone Number"
               },
               "description": "List of zone numbers to bypass before arming"
             },
             "armMode": {
               "title": "Arm Mode",
               "type": "string",
-              "required": true,
               "default": "arm",
               "oneOf": [
                 { "title": "Away", "enum": ["arm"] },
@@ -158,7 +157,18 @@
       "expandable": true,
       "expanded": false,
       "items": [
-        "includedZones",
+        {
+          "key": "includedZones",
+          "type": "array",
+          "title": "Included Zones",
+          "description": "Add zone numbers to include (leave empty for all zones)",
+          "items": [
+            {
+              "type": "number",
+              "placeholder": "Enter zone number (e.g. 1, 2, 3)"
+            }
+          ]
+        },
         "addBypassSwitches"
       ]
     },
