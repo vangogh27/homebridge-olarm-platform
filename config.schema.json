@@ -7,6 +7,12 @@
   "schema": {
     "type": "object",
     "properties": {
+      "platform": {
+        "title": "Platform",
+        "type": "string",
+        "const": "Olarm",
+        "description": "Must be 'Olarm' - do not change"
+      },
       "name": {
         "title": "Name",
         "type": "string",
@@ -123,6 +129,10 @@
     }
   },
   "layout": [
+    {
+      "key": "platform",
+      "type": "hidden"
+    },
     {
       "type": "flex",
       "flex-flow": "row wrap",
